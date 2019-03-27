@@ -1,13 +1,18 @@
 #include <RH_ASK.h>
 #include <SPI.h>
 #include <FastLED.h>
+
+//Lights-----------------------------------------------------
+int type = 0;//Lights type
+int address;
+//-----------------------------------------------------------
 //Comm-------------------------------------------------------
 RH_ASK driver;
 char key;
 String data = "";
-int startInd, ind1, ind2, ind3, endInd;
-int a, b, c, d;
-String aS, bS ,cS ,dS;
+int startInd, ind1, ind2, ind3, ind4, endInd;
+int typeIn, addressIn, a, b, c;
+String typeInS, addressInS, aS ,bS, cS;
 
 //-----------------------------------------------------------
 
@@ -101,21 +106,25 @@ boolean readRadio(){
     ind1 = data.indexOf('/');
     ind2 = data.indexOf('/',ind1+1);
     ind3 = data.indexOf('/',ind2+1);
+    ind4 = data.indexOf('/',ind3+1);
     endInd = data.indexOf('>');
 
     //String Data
-    aS = data.substring(startInd+1,ind1);
-    bS = data.substring(ind1+1,ind2);
-    cS = data.substring(ind2+1,ind3);
-    dS = data.substring(ind3+1,endInd);
+    typeInS = data.substring(startInd+1,ind1);
+    addressInS = data.substring(ind1+1,ind2);
+    aS = data.substring(ind2+1,ind3);
+    bS = data.substring(ind3+1,ind4);
+    cS = data.substring(ind4+1,endInd);
     
     //Int data
+    typeIn = typeInS.toInt();
+    addressIn = addressInS.toInt();
     a = aS.toInt();
     b = bS.toInt();
     c = cS.toInt();
-    d = dS.toInt();
-
-    return true;
+    
+    if(typeIn == type && addressIn = address)
+      return true;
   }
 
   return false;
@@ -124,7 +133,7 @@ boolean readRadio(){
 void set(){
 
   //Color
-  switch(c){
+  switch(b){
     case YELLOW:
       currentPalette = yellow_p;
       break;
@@ -140,7 +149,7 @@ void set(){
   }
   
   //Routine
-  currentRoutine = d;
+  currentRoutine = c;
   /* I might not need this at all i might be dumb
   switch(d){
     case SOLID:

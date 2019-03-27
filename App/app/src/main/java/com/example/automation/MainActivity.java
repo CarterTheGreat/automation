@@ -1,5 +1,6 @@
 package com.example.automation;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -12,20 +13,35 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity
+import app.akexorcist.bluetotohspp.library.BluetoothSPP;
+import app.akexorcist.bluetotohspp.library.BluetoothState;
+import app.akexorcist.bluetotohspp.library.DeviceList;
+
+public class MainActivity
+        extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+
+    static boolean connected;
+    static BluetoothSPP bluetooth;
+
+    static TextView console;
+    Button connect;
+    Button test;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         //Action button
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -35,19 +51,74 @@ public class MainActivity extends AppCompatActivity
         });
 
         //Action drawer
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        //Buttons/Text
+        connect = findViewById(R.id.connect);
+        test = findViewById(R.id.test);
+        console = findViewById(R.id.console);
+
+        //Bluetooth
+        bluetooth = new BluetoothSPP(this);
+
+        if (!bluetooth.isBluetoothAvailable()) {
+            Toast.makeText(getApplicationContext(), "Bluetooth is not available", Toast.LENGTH_SHORT).show();
+            finish();
+        }
+
+        bluetooth.setBluetoothConnectionListener(new BluetoothSPP.BluetoothConnectionListener() {
+            public void onDeviceConnected(String name, String address) {
+                connect.setText("Connected to " + name);
+                connected = true;
+            }
+
+            public void onDeviceDisconnected() {
+                connect.setText("Connection lost");
+            }
+
+            public void onDeviceConnectionFailed() {
+                connect.setText("Unable to connect");
+            }
+        });
+
+        // Connect / test tasks
+
+
+        connect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(bluetooth.getServiceState() == BluetoothState.STATE_CONNECTED){
+                    bluetooth.disconnect();
+                } else {
+                    Intent intent = new Intent(getApplicationContext(), DeviceList.class);
+                    startActivityForResult(intent, BluetoothState.REQUEST_CONNECT_DEVICE);
+                }
+            }
+        });
+
+        test.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                if(bluetooth.getServiceState() == BluetoothState.STATE_CONNECTED) {
+                    bluetooth.send("test", false);
+                    console.setText("Testing");
+                }else
+                    console.setText("Not connected");
+            }
+
+        });
     }
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -77,7 +148,6 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
@@ -85,12 +155,19 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_lights) {
             Toast.makeText(this, "Lights", Toast.LENGTH_SHORT).show();
+            //sendData("1000");
         } else if (id == R.id.nav_door) {
             Toast.makeText(this, "Door", Toast.LENGTH_SHORT).show();
+            //sendData("2000");
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    public void sendData(String data){
+        bluetooth.send(data, false);
+        console.setText("Sent: "+data);
     }
 }

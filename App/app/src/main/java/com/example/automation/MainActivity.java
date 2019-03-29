@@ -17,6 +17,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 import app.akexorcist.bluetotohspp.library.BluetoothSPP;
 import app.akexorcist.bluetotohspp.library.BluetoothState;
 import app.akexorcist.bluetotohspp.library.DeviceList;
@@ -25,6 +27,7 @@ public class MainActivity
         extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    public static ArrayList<Device> devices = new ArrayList<Device>();
 
     static boolean connected;
     static BluetoothSPP bluetooth;
@@ -89,8 +92,6 @@ public class MainActivity
         });
 
         // Connect / test tasks
-
-
         connect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -163,11 +164,11 @@ public class MainActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_lights) {
-            Toast.makeText(this, "Lights", Toast.LENGTH_SHORT).show();
-            //sendData("1000");
+            Intent myIntent = new Intent(MainActivity.this, LightActivity.class);
+            MainActivity.this.startActivity(myIntent);
         } else if (id == R.id.nav_door) {
-            Toast.makeText(this, "Door", Toast.LENGTH_SHORT).show();
-            //sendData("2000");
+            Intent myIntent = new Intent(MainActivity.this, DoorActivity.class);
+            MainActivity.this.startActivity(myIntent);
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -175,8 +176,9 @@ public class MainActivity
         return true;
     }
 
-    public void sendData(String data){
-        bluetooth.send(data, false);
+    public static void sendData(String data){
+        //TODO: uncomment bluetooth.send here once bt is connected
+        //bluetooth.send(data, false);
         console.setText("Sent: "+data);
     }
 }

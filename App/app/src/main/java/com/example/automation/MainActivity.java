@@ -30,8 +30,7 @@ public class MainActivity
     static BluetoothSPP bluetooth;
 
     static TextView console;
-    Button connect;
-    Button test;
+    Button connect, test, add;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +62,7 @@ public class MainActivity
         //Buttons/Text
         connect = findViewById(R.id.connect);
         test = findViewById(R.id.test);
+        add = findViewById(R.id.add);
         console = findViewById(R.id.console);
 
         //Bluetooth
@@ -111,6 +111,15 @@ public class MainActivity
                     console.setText("Testing");
                 }else
                     console.setText("Not connected");
+            }
+
+        });
+
+        add.setOnClickListener( new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                Intent myIntent = new Intent(MainActivity.this, AddActivity.class);
+                MainActivity.this.startActivity(myIntent);
             }
 
         });

@@ -5,8 +5,8 @@ public class Door
 
     int type = Device.DOOR;
 
-    public Door(String name, int id){
-        super(name, Device.LIGHT, id);
+    public Door(String name, int ID){
+        super(name, Device.DOOR, ID);
     }
 
     public String getName(){
@@ -17,8 +17,8 @@ public class Door
         return type;
     }
 
-    public int getid(){
-        return id;
+    public int getID(){
+        return ID;
     }
 
     public void open(){

@@ -6,12 +6,12 @@ public class Device {
     public static final int DOOR = 1;
 
     String name;
-    int type, id;
+    int type, ID;
 
-    public Device(String name, int type, int id){
+    public Device(String name, int type, int ID){
         this.name = name;
         this.type = type;
-        this.id = id;
+        this.ID = ID;
     }
 
     public String getName(){
@@ -22,7 +22,7 @@ public class Device {
         return type;
     }
 
-    public int getid(){
-        return id;
+    public int getID(){
+        return ID;
     }
 }

@@ -1,5 +1,6 @@
 package com.example.automation;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -108,8 +109,8 @@ public class MainActivity
             @Override
             public void onClick(View v){
                 if(bluetooth.getServiceState() == BluetoothState.STATE_CONNECTED) {
-                    bluetooth.send("test", false);
-                    console.setText("Testing");
+                    //bluetooth.send("test", false);
+                    sendData("t","t","0","0","0");
                 }else
                     console.setText("Not connected");
             }
@@ -176,9 +177,57 @@ public class MainActivity
         return true;
     }
 
-    public static void sendData(String data){
-        //TODO: uncomment bluetooth.send here once bt is connected
-        //bluetooth.send(data, false);
-        console.setText("Sent: "+data);
+    public static void sendData(String type, String id, String a, String b, String c){
+
+        /*
+        String msg = "<" + type + "/" + id + "/" + a + "/" + b + "/" + c + ">";
+
+
+        char[] msgC = msg.toCharArray();
+        byte[] msgB = new byte[msgC.length];
+        for(int i = 0; i < msgC.length; i++){
+            msgB[i] = (byte) msgC[i];
+        }
+
+        bluetooth.send(msgB, true);
+        */
+        String send = "<" + type + "/" + id + "/" + a + "/" + b + "/" + c + ">";
+        String data = "test";
+        bluetooth.send(send, true);
+        console.setText("Sent: "+send);
     }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == BluetoothState.REQUEST_CONNECT_DEVICE) {
+            if (resultCode == Activity.RESULT_OK)
+                bluetooth.connect(data);
+        } else if (requestCode == BluetoothState.REQUEST_ENABLE_BT) {
+            if (resultCode == Activity.RESULT_OK) {
+                bluetooth.setupService();
+            } else {
+                Toast.makeText(getApplicationContext()
+                        , "Bluetooth was not enabled."
+                        , Toast.LENGTH_SHORT).show();
+                finish();
+            }
+        }
+    }
+
+    public void onStart() {
+        super.onStart();
+        if (!bluetooth.isBluetoothEnabled()) {
+            bluetooth.enable();
+        } else {
+            if (!bluetooth.isServiceAvailable()) {
+                bluetooth.setupService();
+                bluetooth.startService(BluetoothState.DEVICE_OTHER);
+            }
+        }
+    }
+
+    public void onDestroy() {
+        super.onDestroy();
+        bluetooth.stopService();
+    }
+
 }

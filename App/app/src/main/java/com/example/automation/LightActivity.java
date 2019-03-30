@@ -38,7 +38,7 @@ public class LightActivity
 
         allLightsSwitch = findViewById(R.id.allLightsSwitch);
 
-       
+
 
     }
 

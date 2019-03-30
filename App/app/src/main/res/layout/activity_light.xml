@@ -30,7 +30,7 @@
         android:layout_marginTop="48dp"
         android:layout_marginEnd="165dp"
         android:layout_marginBottom="250dp"
-        android:text="On/Off"
+        android:text="Off/On"
         app:layout_constraintBottom_toTopOf="@+id/lightText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

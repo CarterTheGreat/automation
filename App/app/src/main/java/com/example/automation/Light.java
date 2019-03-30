@@ -28,13 +28,13 @@ public class Light
 
     public void on(){
         lit = true;
-        MainActivity.sendData(typeS+ s+ id+ s+ "1"+ s+ "0"+ s+ "0");
+        MainActivity.sendData(typeS+ s + id+ s + "1"+ s + "0"+ s + "0");
         //turn lights on bla bla bla
     }
 
     public void off(){
         lit = false;
-        MainActivity.sendData(typeS+ s+ id+ s+ "2"+ s+ "0"+ s+ "0");
+        MainActivity.sendData(typeS+ s + id+ s + "2"+ s + "0"+ s + "0");
         //turn off now
     }
 }

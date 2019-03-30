@@ -1,0 +1,2 @@
+Add dynamic buttons for Devices in their respective menues
+Permanent storage of Devices 

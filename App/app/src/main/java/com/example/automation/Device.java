@@ -2,8 +2,8 @@ package com.example.automation;
 
 public class Device {
 
-    public static int LIGHT = 0;
-    public static int DOOR = 1;
+    public static final int LIGHT = 0;
+    public static final int DOOR = 1;
 
     String name;
     int type, id;

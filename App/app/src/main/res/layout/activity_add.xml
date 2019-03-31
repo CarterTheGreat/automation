@@ -6,17 +6,36 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@android:color/holo_blue_bright"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+    </android.support.design.widget.AppBarLayout>
+
     <TextView
         android:id="@+id/text"
         android:layout_width="wrap_content"
-        android:layout_height="23dp"
+        android:layout_height="24dp"
         android:layout_marginStart="88dp"
-        android:layout_marginTop="207dp"
+        android:layout_marginTop="90dp"
         android:layout_marginEnd="89dp"
         android:layout_marginBottom="29dp"
         android:text="@string/addText"
         app:layout_constraintBottom_toTopOf="@+id/type"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.528"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -34,16 +53,17 @@
     <EditText
         android:id="@+id/deviceID"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="49dp"
         android:layout_marginStart="98dp"
-        android:layout_marginTop="83dp"
+        android:layout_marginTop="62dp"
         android:layout_marginEnd="100dp"
-        android:layout_marginBottom="320dp"
+        android:layout_marginBottom="15dp"
         android:ems="10"
         android:inputType="number"
         android:text="@string/id"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/add"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/type" />
 
@@ -52,9 +72,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="161dp"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="15dp"
         android:layout_marginEnd="162dp"
-        android:layout_marginBottom="212dp"
+        android:layout_marginBottom="390dp"
         android:text="@string/add"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

@@ -34,7 +34,8 @@ public class MainActivity
     static BluetoothSPP bluetooth;
 
     static TextView console;
-    Button connect, test, add;
+    Button connect, test;
+    FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,12 +45,12 @@ public class MainActivity
         setSupportActionBar(toolbar);
 
         //Action button
-        FloatingActionButton fab = findViewById(R.id.fab);
+        fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "This is gonna add devices one day i promise", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Intent myIntent = new Intent(MainActivity.this, AddActivity.class);
+                MainActivity.this.startActivity(myIntent);
             }
         });
 
@@ -66,7 +67,6 @@ public class MainActivity
         //Buttons/Text
         connect = findViewById(R.id.connect);
         test = findViewById(R.id.test);
-        add = findViewById(R.id.add);
         console = findViewById(R.id.console);
 
         //Bluetooth
@@ -117,14 +117,6 @@ public class MainActivity
 
         });
 
-        add.setOnClickListener( new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                Intent myIntent = new Intent(MainActivity.this, AddActivity.class);
-                MainActivity.this.startActivity(myIntent);
-            }
-
-        });
     }
 
     @Override

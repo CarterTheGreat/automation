@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -26,7 +27,10 @@ public class AddActivity
     protected void onCreate(Bundle savedInstanceState) {
         Intent intent = getIntent();
         super.onCreate(savedInstanceState);
+        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_add);
+
+
 
         //Text view
         text = findViewById(R.id.text);
@@ -41,6 +45,7 @@ public class AddActivity
 
         //EditText
         deviceID = findViewById(R.id.deviceID);
+        //deviceID.setOnClickListener(this);
 
         //Button
         add = findViewById(R.id.add);
@@ -66,4 +71,5 @@ public class AddActivity
             }
         });
     }
+
 }

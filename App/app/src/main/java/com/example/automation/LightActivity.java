@@ -68,9 +68,9 @@ public class LightActivity
 
                 //LLV
                 LinearLayout ll = (LinearLayout)findViewById(R.id.buttonLayout);
-                ll.addView(layouts.get(i), vp);
-                //ll.addView(names.get(i), vp);
-                //ll.addView( power.get(i), vp);
+                //ll.addView(layouts.get(i), vp);
+                ll.addView(names.get(i), vp);
+                ll.addView( power.get(i), vp);
             }
         }
 

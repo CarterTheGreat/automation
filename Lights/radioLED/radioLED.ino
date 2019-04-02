@@ -4,7 +4,7 @@
 
 //Lights-----------------------------------------------------
 int type = 0;//Lights type
-int address;
+int address = 0;
 //-----------------------------------------------------------
 //Comm-------------------------------------------------------
 RH_ASK driver;
@@ -53,16 +53,17 @@ void setup() {
   delay( 3000 ); // power-up safety delay
   
   Serial.begin(9600);
+  
   if(!driver.init())
     Serial.println("Radio driver init failed");
-  
-  delay(500);
   
   FastLED.addLeds<LED_TYPE, LED_PIN, COLOR_ORDER>(leds, NUM_LEDS).setCorrection(TypicalLEDStrip);
   FastLED.setBrightness(BRIGHTNESS);
     
   currentPalette = yellow_p;
   currentBlending = LINEARBLEND;
+
+  Serial.print("Starting LEDs");
 }
 
 int i =0;
@@ -70,9 +71,15 @@ int i =0;
 static uint8_t startIndex = 0;
     
 void loop(){
-  if(readRadio())
-    set();
-  
+
+    uint8_t buf[24];
+    uint8_t buflen = sizeof(buf);
+    if (driver.recv(buf, &buflen)){
+      Serial.print("Message: ");
+      Serial.println((char*)buf);       
+      readRadio(buf);  
+    }
+  /*
   startIndex ++; // Motion Speed
   
   switch(currentRoutine){
@@ -88,18 +95,18 @@ void loop(){
     
   }
   FastLED.show();
-  FastLED.delay(1000 / UPDATES_PER_SECOND);
-  
+  */
 }
 
-boolean readRadio(){
+void readRadio(String data){
   //Reads radio data sent
-  uint8_t buf[17];
-  uint8_t buflen = sizeof(buf);
-  while(driver.recv(buf, &buflen)){
+  //uint8_t buf[20];
+  //uint8_t buflen = sizeof(buf);
+  //while(driver.recv(buf, &buflen)){
     //Reading
-    Serial.print((char*)buf);
-    data = buf;
+    //Serial.print("Recieved: ");
+    //Serial.println((char*)buf);
+    //data = buf;
 
     //Indexing
     startInd = data.indexOf('<');
@@ -123,11 +130,10 @@ boolean readRadio(){
     b = bS.toInt();
     c = cS.toInt();
     
-    if(typeIn == type && addressIn = address)
-      return true;
-  }
+    if(typeIn == type && addressIn == address)
+      set();
+  //}
 
-  return false;
 }
 
 void set(){

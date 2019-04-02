@@ -167,18 +167,19 @@ public class MainActivity
 
     public static void sendData(String type, String id, String a, String b, String c){
 
-        /*
-        String msg = "<" + type + "/" + id + "/" + a + "/" + b + "/" + c + ">";
+        //TODO: make boolean and set buttons only to change if sent
+        String send = "<" + type + "/" + id + "/" + a + "/" + b + "/" + c + ">";
+        String data = "test";
+        if(bluetooth.getServiceState() == BluetoothState.STATE_CONNECTED) {
+            bluetooth.send(send, true);
+            console.setText("Sent: " + send);
+        }else
+            console.setText("Attempted to send: "+send+" but was not connected");
+    }
 
+    public static void sendData(int type, int id, int a, int b, int c){
 
-        char[] msgC = msg.toCharArray();
-        byte[] msgB = new byte[msgC.length];
-        for(int i = 0; i < msgC.length; i++){
-            msgB[i] = (byte) msgC[i];
-        }
-
-        bluetooth.send(msgB, true);
-        */
+        //TODO: make boolean and set buttons only to change if sent
         String send = "<" + type + "/" + id + "/" + a + "/" + b + "/" + c + ">";
         String data = "test";
         if(bluetooth.getServiceState() == BluetoothState.STATE_CONNECTED) {

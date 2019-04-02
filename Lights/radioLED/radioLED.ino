@@ -138,24 +138,8 @@ void readRadio(String data){
 
 void set(){
 
-  //Color
-  switch(b){
-    case YELLOW:
-      currentPalette = yellow_p;
-      break;
-    case BLUE:
-      currentPalette = blue_p;
-      break;
-    case GREEN:
-      currentPalette = green_p;
-      break;
-    case PINK:
-      currentPalette = pink_p;
-      break;
-  }
-  
   //Routine
-  currentRoutine = c;
+  currentRoutine = b;
   /* I might not need this at all i might be dumb
   switch(d){
     case SOLID:
@@ -169,6 +153,21 @@ void set(){
       break;
   }
   */
+  //Color
+  switch(c){
+    case YELLOW:
+      currentPalette = yellow_p;
+      break;
+    case BLUE:
+      currentPalette = blue_p;
+      break;
+    case GREEN:
+      currentPalette = green_p;
+      break;
+    case PINK:
+      currentPalette = pink_p;
+      break;
+  }
 }
 
 // Snake/Special fill 

@@ -25,6 +25,16 @@
     <string name="test">Test</string>
     <string name="comingSoon">Coming Soon</string>
 
+    <string-array name="routines">
+        <item>Solid</item>
+        <item>Snake</item>
+        <item>Fade</item>
+    </string-array>
 
+    <string-array name="colors">
+        <item>Baby Blue</item>
+        <item>Pale Pink</item>
+        <item>Pale Yellow</item>
+    </string-array>
 
 </resources>

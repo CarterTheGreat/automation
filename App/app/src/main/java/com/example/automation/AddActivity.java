@@ -1,6 +1,7 @@
 package com.example.automation;
 
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -21,7 +22,7 @@ public class AddActivity
 
     static TextView text;
     Spinner type;
-    EditText deviceID;
+    EditText deviceID, deviceName;
     Button add;
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,8 +30,6 @@ public class AddActivity
         super.onCreate(savedInstanceState);
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_add);
-
-
 
         //Text view
         text = findViewById(R.id.text);
@@ -45,29 +44,48 @@ public class AddActivity
 
         //EditText
         deviceID = findViewById(R.id.deviceID);
-        //deviceID.setOnClickListener(this);
+        deviceName = findViewById(R.id.deviceName);
 
         //Button
         add = findViewById(R.id.add);
         add.setOnClickListener( new View.OnClickListener(){
             @Override
-            public void onClick(View v){
+            public void onClick(View v) {
                 text.setText("Adding attempt");
 
-                int ID = Integer.parseInt( deviceID.getText().toString() );
+                try {
+                    int ID = Integer.parseInt(deviceID.getText().toString());
+                    String name = deviceName.getText().toString();
 
+                    //TODO: Make this check if device is already in existance
 
-                //TODO: change name in to an entered value and add edit text on activity_add for this
-                if(type.getSelectedItem().toString().equals("Light") ) {
-                    devices.add(new Light("Light", ID));
-                    text.setText("Added Light with ID "+ID);
+                    if (ID < 255 && ID >= 0) {
+                        if (type.getSelectedItem().toString().equals("Light")) {
+
+                            try {
+                                if (devices.get(ID).getType() == Device.LIGHT) {
+                                    text.setText("Device with this ID already exists");
+                                }
+                            } catch (Exception e) {
+                                devices.add(new Light(name, ID));
+                                text.setText("Added Light with ID " + ID);
+                            }
+
+                        } else if (type.getSelectedItem().toString().equals("Door")) {
+                            try {
+                                if (devices.get(ID).getType() == Device.DOOR) {
+                                    text.setText("Device with this ID already exists");
+                                }
+                            } catch (Exception e) {
+                                devices.add(new Door(name, ID));
+                                text.setText("Added Door with ID " + ID);
+                            }
+                        } else
+                            text.setText("No " + type.getSelectedItem().toString() + " device Added with ID " + ID);
+                    } else
+                        text.setText("ID is above 254");
+                }catch(Exception e){
                 }
-                else if(type.getSelectedItem().toString().equals("Door") ) {
-                    devices.add(new Door("Door", ID));
-                    text.setText("Added Door with ID "+ID);
-                }
-                else
-                    text.setText("No "+ type.getSelectedItem().toString()+" device Added with ID "+ ID);
             }
         });
     }

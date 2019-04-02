@@ -37,4 +37,8 @@ public class Light
         MainActivity.sendData(typeS, idS, "2", "0", "0");
         //turn off now
     }
+
+    public boolean isLit(){
+        return lit;
+    }
 }

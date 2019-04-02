@@ -108,11 +108,7 @@ public class MainActivity
         test.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                if(bluetooth.getServiceState() == BluetoothState.STATE_CONNECTED) {
-                    //bluetooth.send("test", false);
-                    sendData("t","t","0","0","0");
-                }else
-                    console.setText("Not connected");
+                sendData("t","t","0","0","0");
             }
 
         });
@@ -185,8 +181,11 @@ public class MainActivity
         */
         String send = "<" + type + "/" + id + "/" + a + "/" + b + "/" + c + ">";
         String data = "test";
-        bluetooth.send(send, true);
-        console.setText("Sent: "+send);
+        if(bluetooth.getServiceState() == BluetoothState.STATE_CONNECTED) {
+            bluetooth.send(send, true);
+            console.setText("Sent: " + send);
+        }else
+            console.setText("Attempted to send: "+send+" but was not connected");
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

@@ -156,8 +156,10 @@ public class MainActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-
-        if (id == R.id.nav_lights) {
+        if(id == R.id.nav_home){
+            //Your'e already there
+        }
+        else if (id == R.id.nav_lights) {
             Intent myIntent = new Intent(MainActivity.this, LightActivity.class);
             MainActivity.this.startActivity(myIntent);
         } else if (id == R.id.nav_door) {

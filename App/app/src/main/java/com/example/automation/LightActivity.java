@@ -1,16 +1,17 @@
 package com.example.automation;
 
 import android.content.Intent;
-import android.database.DataSetObserver;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.support.constraint.ConstraintLayout;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Layout;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.Adapter;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -21,13 +22,15 @@ import android.widget.LinearLayout.LayoutParams;
 import java.util.ArrayList;
 
 public class LightActivity
-        extends AppCompatActivity {
+        extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener{
 
     ArrayList<Device> devices = MainActivity.devices;
 
     TextView text;
     Switch allLightsSwitch;
     Button submit;
+    FloatingActionButton fab;
 
     String deviceData = "";
 
@@ -43,12 +46,33 @@ public class LightActivity
         super.onCreate(savedInstanceState);
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_light);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
+        //Text
         text = findViewById(R.id.lightText);
 
+        //Action button
+        fab = findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent myIntent = new Intent(LightActivity.this, AddActivity.class);
+                LightActivity.this.startActivity(myIntent);
+            }
+        });
+
+        //Action drawer
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
         //Build
-        //TODO: on build, set vals to correct
-        //TODO: get(i) is refrencing object one less than self
         for(int i = 0; i < devices.size(); i++){
             if( devices.get(i).getType() == Device.LIGHT)  {
 
@@ -105,7 +129,7 @@ public class LightActivity
             }
         }
 
-        text.setText(deviceData);
+        //text.setText(deviceData);
 
         allLightsSwitch = findViewById(R.id.allLightsSwitch);
         allLightsSwitch.setTextOn("On");
@@ -138,4 +162,23 @@ public class LightActivity
 
     }
 
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
+        if(id == R.id.nav_home){
+            Intent myIntent = new Intent(LightActivity.this, MainActivity.class);
+            LightActivity.this.startActivity(myIntent);
+        }
+        else if (id == R.id.nav_lights) {
+
+        } else if (id == R.id.nav_door) {
+            Intent myIntent = new Intent(LightActivity.this, DoorActivity.class);
+            LightActivity.this.startActivity(myIntent);
+        }
+
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
 }

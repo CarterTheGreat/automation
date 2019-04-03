@@ -172,6 +172,35 @@ public class MainActivity
         return true;
     }
 
+    //TODO: Figure this out im too tired rn
+    //Storage
+    public static <E> void SaveArrayListToSD(Context mContext, String filename, ArrayList<E> list){
+        try {
+
+            FileOutputStream fos = mContext.openFileOutput(filename + ".dat", mContext.MODE_PRIVATE);
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+            oos.writeObject(list);
+            fos.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static Object ReadArrayListFromSD(Context mContext,String filename){
+        try {
+            FileInputStream fis = mContext.openFileInput(filename + ".dat");
+            ObjectInputStream ois = new ObjectInputStream(fis);
+            Object obj= (Object) ois.readObject();
+            fis.close();
+            return obj;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ArrayList<Object>();
+        }
+    }
+
+    //BT
     public static boolean sendData(String type, String id, String a, String b, String c){
 
         //TODO: make boolean and set buttons only to change if sent
@@ -199,33 +228,6 @@ public class MainActivity
         }else {
             console.setText("Attempted to send: " + send + " but was not connected");
             return false;
-        }
-    }
-
-    //TODO: Figure this out im too tired rn
-    public static <E> void SaveArrayListToSD(Context mContext, String filename, ArrayList<E> list){
-        try {
-
-            FileOutputStream fos = mContext.openFileOutput(filename + ".dat", mContext.MODE_PRIVATE);
-            ObjectOutputStream oos = new ObjectOutputStream(fos);
-            oos.writeObject(list);
-            fos.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static Object ReadArrayListFromSD(Context mContext,String filename){
-        try {
-            FileInputStream fis = mContext.openFileInput(filename + ".dat");
-            ObjectInputStream ois = new ObjectInputStream(fis);
-            Object obj= (Object) ois.readObject();
-            fis.close();
-            return obj;
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ArrayList<Object>();
         }
     }
 

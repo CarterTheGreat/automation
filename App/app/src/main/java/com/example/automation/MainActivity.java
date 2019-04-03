@@ -1,6 +1,7 @@
 package com.example.automation;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -18,6 +19,10 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
 import app.akexorcist.bluetotohspp.library.BluetoothSPP;
@@ -139,7 +144,7 @@ public class MainActivity
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatementjjjjjjjjjjjjjjj
+        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
@@ -165,7 +170,7 @@ public class MainActivity
         return true;
     }
 
-    public static void sendData(String type, String id, String a, String b, String c){
+    public static boolean sendData(String type, String id, String a, String b, String c){
 
         //TODO: make boolean and set buttons only to change if sent
         String send = "<" + type + "/" + id + "/" + a + "/" + b + "/" + c + ">";
@@ -173,11 +178,14 @@ public class MainActivity
         if(bluetooth.getServiceState() == BluetoothState.STATE_CONNECTED) {
             bluetooth.send(send, true);
             console.setText("Sent: " + send);
-        }else
-            console.setText("Attempted to send: "+send+" but was not connected");
+            return true;
+        }else {
+            console.setText("Attempted to send: " + send + " but was not connected");
+            return false;
+        }
     }
 
-    public static void sendData(int type, int id, int a, int b, int c){
+    public static boolean sendData(int type, int id, int a, int b, int c){
 
         //TODO: make boolean and set buttons only to change if sent
         String send = "<" + type + "/" + id + "/" + a + "/" + b + "/" + c + ">";
@@ -185,8 +193,38 @@ public class MainActivity
         if(bluetooth.getServiceState() == BluetoothState.STATE_CONNECTED) {
             bluetooth.send(send, true);
             console.setText("Sent: " + send);
-        }else
-            console.setText("Attempted to send: "+send+" but was not connected");
+            return true;
+        }else {
+            console.setText("Attempted to send: " + send + " but was not connected");
+            return false;
+        }
+    }
+
+    //TODO: Figure this out im too tired rn
+    public static <E> void SaveArrayListToSD(Context mContext, String filename, ArrayList<E> list){
+        try {
+
+            FileOutputStream fos = mContext.openFileOutput(filename + ".dat", mContext.MODE_PRIVATE);
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+            oos.writeObject(list);
+            fos.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static Object ReadArrayListFromSD(Context mContext,String filename){
+        try {
+            FileInputStream fis = mContext.openFileInput(filename + ".dat");
+            ObjectInputStream ois = new ObjectInputStream(fis);
+            Object obj= (Object) ois.readObject();
+            fis.close();
+            return obj;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ArrayList<Object>();
+        }
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

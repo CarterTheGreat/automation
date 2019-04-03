@@ -36,9 +36,6 @@ public class LightActivity
     ArrayList<Spinner> routines = new ArrayList<Spinner>();
     ArrayList<Spinner> colors = new ArrayList<Spinner>();
 
-    ArrayAdapter<CharSequence> routineAdapter = ArrayAdapter.createFromResource(this, R.array.routines, android.R.layout.simple_spinner_item);
-    ArrayAdapter<CharSequence> colorAdapter = ArrayAdapter.createFromResource(this, R.array.colors, android.R.layout.simple_spinner_item);
-
     ArrayList<LinearLayout> layouts = new ArrayList<LinearLayout>();
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +51,7 @@ public class LightActivity
         //TODO: get(i) is refrencing object one less than self
         for(int i = 0; i < devices.size(); i++){
             if( devices.get(i).getType() == Device.LIGHT)  {
+
                 deviceData += devices.get(i).getName();
                 deviceData += " ";
                 deviceData += devices.get(i).getID();
@@ -63,11 +61,12 @@ public class LightActivity
                 deviceData += ((Light) devices.get(i)).getColor();
                 deviceData += "\n";
 
-
                 //Params
                 LayoutParams op = new LayoutParams(50,30); // Width , height
                 LayoutParams vp = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
                 LayoutParams hp = new LayoutParams(275, LayoutParams.WRAP_CONTENT);
+                ArrayAdapter<CharSequence> routineAdapter = ArrayAdapter.createFromResource(this, R.array.routines, android.R.layout.simple_spinner_item);
+                ArrayAdapter<CharSequence> colorAdapter = ArrayAdapter.createFromResource(this, R.array.colors, android.R.layout.simple_spinner_item);
 
                 //Name text
                 names.add(i, new TextView(this));
@@ -106,29 +105,6 @@ public class LightActivity
             }
         }
 
-        //Action
-        for(int i = 0; i < devices.size(); i++) {
-            final int iter = i;
-            power.get(i).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    /*
-                    if( ((Light) devices.get(iter)).isLit() == 1 ){
-                        ((Light) devices.get(iter)).setLit(false);
-                        power.get(iter).setText("Off");
-                    }else {
-                        ((Light) devices.get(iter)).setLit(true);
-                        power.get(iter).setText("On");
-                    }
-                    */
-
-
-
-                }
-            });
-        }
-
         text.setText(deviceData);
 
         allLightsSwitch = findViewById(R.id.allLightsSwitch);
@@ -142,12 +118,20 @@ public class LightActivity
                 for(int i = 0; i < devices.size(); i++) {
                     Light light = (Light) devices.get(i);
 
-                    light.setLit( power.get(i).isChecked());
-                    //light.setRoutine( routineAdaptor.indexOf(routines.get(i).toString()));
-                    light.setRoutine(   routineAdapter.getItemId(   ) );
-                    //light.setColor( colorAdaptor.indexOf(colors.get(i).toString()));
+                    boolean lastLit = light.isLitB();
+                    int lastRoutine = light.getRoutine();
+                    int lastColor = light.getColor();
 
-                    MainActivity.sendData(light.getType(), light.getID(), light.isLit(), light.getRoutine(), light.getColor());
+                    light.setLit( power.get(i).isChecked());
+                    light.setRoutine( routines.get(i).getSelectedItemPosition() );
+                    light.setColor( colors.get(i).getSelectedItemPosition() );
+
+                    if(!MainActivity.sendData(light.getType(), light.getID(), light.isLit(), light.getRoutine(), light.getColor())){
+                        light.setLit(lastLit);
+                        light.setRoutine(lastRoutine);
+                        light.setColor(lastColor);
+                    }
+
                 }
             }
         });

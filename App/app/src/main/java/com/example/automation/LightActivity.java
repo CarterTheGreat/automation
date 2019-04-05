@@ -19,13 +19,16 @@ import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.LinearLayout.LayoutParams;
+
 import java.util.ArrayList;
+
+import static com.example.automation.Collection.*;
 
 public class LightActivity
         extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener{
 
-    ArrayList<Device> devices = MainActivity.devices;
+    ArrayList<Device> devices = Collection.devices;
 
     TextView text;
     Switch allLightsSwitch;
@@ -72,6 +75,9 @@ public class LightActivity
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        devices.clear();
+        devices = (ArrayList<Device>) Collection.readArrayListFromSD(getApplicationContext(),"devices");
+
         //Build
         for(int i = 0; i < devices.size(); i++){
             if( devices.get(i).getType() == Device.LIGHT)  {
@@ -84,6 +90,7 @@ public class LightActivity
                 deviceData += "\n";
                 deviceData += ((Light) devices.get(i)).getColor();
                 deviceData += "\n";
+
 
                 //Params
                 LayoutParams op = new LayoutParams(50,30); // Width , height
@@ -150,10 +157,13 @@ public class LightActivity
                     light.setRoutine( routines.get(i).getSelectedItemPosition() );
                     light.setColor( colors.get(i).getSelectedItemPosition() );
 
-                    if(!MainActivity.sendData(light.getType(), light.getID(), light.isLit(), light.getRoutine(), light.getColor())){
+                    saveArrayListToSD(getApplicationContext(), "devices", devices);
+
+                    if(!sendData(light.getType(), light.getID(), light.isLit(), light.getRoutine(), light.getColor())){
                         light.setLit(lastLit);
                         light.setRoutine(lastRoutine);
                         light.setColor(lastColor);
+                        saveArrayListToSD(getApplicationContext(), "devices", devices);
                     }
 
                 }

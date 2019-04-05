@@ -15,10 +15,16 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import static com.example.automation.Collection.*;
+
 public class AddActivity
         extends AppCompatActivity {
 
-    ArrayList<Device> devices = MainActivity.devices;
+    final String LIGHT = "Light";
+    final String DOOR = "Door";
+
+
+    ArrayList<Device> devices = Collection.devices;
 
     static TextView text;
     Spinner type;
@@ -57,10 +63,8 @@ public class AddActivity
                     int ID = Integer.parseInt(deviceID.getText().toString());
                     String name = deviceName.getText().toString();
 
-                    //TODO: Make this check if device is already in existance
-
                     if (ID < 255 && ID >= 0) {
-                        if (type.getSelectedItem().toString().equals("Light")) {
+                        if (type.getSelectedItem().toString().equals(LIGHT)) {
 
                             try {
                                 if (devices.get(ID).getType() == Device.LIGHT) {
@@ -68,16 +72,19 @@ public class AddActivity
                                 }
                             } catch (Exception e) {
                                 devices.add(new Light(name, ID));
+                                saveArrayListToSD(getApplicationContext(), "devices", devices);
                                 text.setText("Added Light with ID " + ID);
                             }
 
-                        } else if (type.getSelectedItem().toString().equals("Door")) {
+                        } else if (type.getSelectedItem().toString().equals(DOOR)) {
                             try {
                                 if (devices.get(ID).getType() == Device.DOOR) {
                                     text.setText("Device with this ID already exists");
                                 }
                             } catch (Exception e) {
                                 devices.add(new Door(name, ID));
+                                Collection.saveDevices();
+                                saveArrayListToSD(getApplicationContext(), "devices", devices);
                                 text.setText("Added Door with ID " + ID);
                             }
                         } else

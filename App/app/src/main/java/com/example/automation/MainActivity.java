@@ -19,11 +19,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.util.ArrayList;
+import static com.example.automation.Collection.*;
 
 import app.akexorcist.bluetotohspp.library.BluetoothSPP;
 import app.akexorcist.bluetotohspp.library.BluetoothState;
@@ -33,7 +29,7 @@ public class MainActivity
         extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    public static ArrayList<Device> devices = new ArrayList<Device>();
+    //public static ArrayList<Device> devices = new ArrayList<Device>();
 
     static boolean connected;
     static BluetoothSPP bluetooth;
@@ -42,12 +38,15 @@ public class MainActivity
     Button connect, test;
     FloatingActionButton fab;
 
+    public Collection collection;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        collection = new Collection();
 
         //Action button
         fab = findViewById(R.id.fab);
@@ -172,65 +171,6 @@ public class MainActivity
         return true;
     }
 
-    //TODO: Figure this out im too tired rn
-    //Storage
-    public static <E> void SaveArrayListToSD(Context mContext, String filename, ArrayList<E> list){
-        try {
-
-            FileOutputStream fos = mContext.openFileOutput(filename + ".dat", mContext.MODE_PRIVATE);
-            ObjectOutputStream oos = new ObjectOutputStream(fos);
-            oos.writeObject(list);
-            fos.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static Object ReadArrayListFromSD(Context mContext,String filename){
-        try {
-            FileInputStream fis = mContext.openFileInput(filename + ".dat");
-            ObjectInputStream ois = new ObjectInputStream(fis);
-            Object obj= (Object) ois.readObject();
-            fis.close();
-            return obj;
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ArrayList<Object>();
-        }
-    }
-
-    //BT
-    public static boolean sendData(String type, String id, String a, String b, String c){
-
-        //TODO: make boolean and set buttons only to change if sent
-        String send = "<" + type + "/" + id + "/" + a + "/" + b + "/" + c + ">";
-        String data = "test";
-        if(bluetooth.getServiceState() == BluetoothState.STATE_CONNECTED) {
-            bluetooth.send(send, true);
-            console.setText("Sent: " + send);
-            return true;
-        }else {
-            console.setText("Attempted to send: " + send + " but was not connected");
-            return false;
-        }
-    }
-
-    public static boolean sendData(int type, int id, int a, int b, int c){
-
-        //TODO: make boolean and set buttons only to change if sent
-        String send = "<" + type + "/" + id + "/" + a + "/" + b + "/" + c + ">";
-        String data = "test";
-        if(bluetooth.getServiceState() == BluetoothState.STATE_CONNECTED) {
-            bluetooth.send(send, true);
-            console.setText("Sent: " + send);
-            return true;
-        }else {
-            console.setText("Attempted to send: " + send + " but was not connected");
-            return false;
-        }
-    }
-
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == BluetoothState.REQUEST_CONNECT_DEVICE) {
             if (resultCode == Activity.RESULT_OK)
@@ -247,6 +187,7 @@ public class MainActivity
         }
     }
 
+    //Setup
     public void onStart() {
         super.onStart();
         if (!bluetooth.isBluetoothEnabled()) {

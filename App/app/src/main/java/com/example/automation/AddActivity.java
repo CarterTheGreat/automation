@@ -1,10 +1,8 @@
 package com.example.automation;
 
 import android.content.Intent;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Window;
 import android.widget.ArrayAdapter;
@@ -14,8 +12,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-
-import static com.example.automation.Collection.*;
 
 public class AddActivity
         extends AppCompatActivity {
@@ -72,7 +68,8 @@ public class AddActivity
                                 }
                             } catch (Exception e) {
                                 devices.add(new Light(name, ID));
-                                saveArrayListToSD(getApplicationContext(), "devices", devices);
+                                //TODO: save devices
+                                //saveDevices();
                                 text.setText("Added Light with ID " + ID);
                             }
 
@@ -83,8 +80,10 @@ public class AddActivity
                                 }
                             } catch (Exception e) {
                                 devices.add(new Door(name, ID));
-                                Collection.saveDevices();
-                                saveArrayListToSD(getApplicationContext(), "devices", devices);
+
+                                //TODO: save devices
+                                //Collection.saveDevices();
+                                //saveDevices();
                                 text.setText("Added Door with ID " + ID);
                             }
                         } else

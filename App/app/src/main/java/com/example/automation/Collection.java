@@ -2,57 +2,25 @@ package com.example.automation;
 
 import android.app.Application;
 import android.content.Context;
+import android.os.Environment;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
-import java.io.FileInputStream;
+import java.io.File;
 import java.io.FileOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.IOError;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 
 import app.akexorcist.bluetotohspp.library.BluetoothSPP;
 import app.akexorcist.bluetotohspp.library.BluetoothState;
 
-public class Collection extends Application {
+public class Collection extends Application{
 
     static BluetoothSPP bluetooth = MainActivity.bluetooth;
     static TextView console = MainActivity.console;
 
-    public static ArrayList<Device> devices = new ArrayList<Device>();
-
-    private static Application sApplicaiton;
-    private static Context context;
-
-    //Storage
-    public static void saveDevices(){
-        saveArrayListToSD(getContext(), "devices", devices);
-    }
-
-    public static <E> void saveArrayListToSD(Context mContext, String filename, ArrayList<E> list){
-        try {
-            FileOutputStream fos = mContext.openFileOutput(filename + ".dat", mContext.MODE_PRIVATE);
-            ObjectOutputStream oos = new ObjectOutputStream(fos);
-            oos.writeObject(list);
-            fos.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static Object readArrayListFromSD(Context mContext,String filename){
-        try {
-            FileInputStream fis = mContext.openFileInput(filename + ".dat");
-            ObjectInputStream ois = new ObjectInputStream(fis);
-            Object obj= (Object) ois.readObject();
-            fis.close();
-            return obj;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ArrayList<Object>();
-        }
-    }
+    public static ArrayList<Device> devices = new ArrayList<>();
 
     //BT
     public static boolean sendData(String type, String id, String a, String b, String c){
@@ -84,19 +52,4 @@ public class Collection extends Application {
             return false;
         }
     }
-
-    //Context
-    public void onCreate(){
-        super.onCreate();
-        sApplicaiton = this;
-    }
-
-    public static Application getApplication(){
-        return sApplicaiton;
-    }
-
-    public static Context getContext(){
-        return Collection.context;
-    }
-
 }

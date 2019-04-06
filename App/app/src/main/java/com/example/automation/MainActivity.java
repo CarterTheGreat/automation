@@ -19,6 +19,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
+
 import static com.example.automation.Collection.*;
 
 import app.akexorcist.bluetotohspp.library.BluetoothSPP;
@@ -28,8 +30,6 @@ import app.akexorcist.bluetotohspp.library.DeviceList;
 public class MainActivity
         extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-
-    //public static ArrayList<Device> devices = new ArrayList<Device>();
 
     static boolean connected;
     static BluetoothSPP bluetooth;
@@ -204,5 +204,7 @@ public class MainActivity
         super.onDestroy();
         bluetooth.stopService();
     }
+
+
 
 }

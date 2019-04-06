@@ -22,7 +22,7 @@ import android.widget.LinearLayout.LayoutParams;
 
 import java.util.ArrayList;
 
-import static com.example.automation.Collection.*;
+import static com.example.automation.Collection.sendData;
 
 public class LightActivity
         extends AppCompatActivity
@@ -75,8 +75,9 @@ public class LightActivity
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        devices.clear();
-        devices = (ArrayList<Device>) Collection.readArrayListFromSD(getApplicationContext(),"devices");
+        //TODO: read devices
+        //devices.clear();
+        //devices = (ArrayList<Device>) readDevices();
 
         //Build
         for(int i = 0; i < devices.size(); i++){
@@ -157,13 +158,16 @@ public class LightActivity
                     light.setRoutine( routines.get(i).getSelectedItemPosition() );
                     light.setColor( colors.get(i).getSelectedItemPosition() );
 
-                    saveArrayListToSD(getApplicationContext(), "devices", devices);
+                    //TODO: save devices
+                    //saveDevices();
 
                     if(!sendData(light.getType(), light.getID(), light.isLit(), light.getRoutine(), light.getColor())){
                         light.setLit(lastLit);
                         light.setRoutine(lastRoutine);
                         light.setColor(lastColor);
-                        saveArrayListToSD(getApplicationContext(), "devices", devices);
+
+                        //TODO: save devices
+                        //saveDevices();
                     }
 
                 }
